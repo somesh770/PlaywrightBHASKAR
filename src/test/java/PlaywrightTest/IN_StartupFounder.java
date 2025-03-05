@@ -16,30 +16,33 @@ import com.microsoft.playwright.Playwright;
 
 import Utility_Pack.ReusableDetails;
 
-public class IN_StartupFounder  {
+import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.AssertJUnit.assertTrue;
+
+public class IN_StartupFounder {
 
 	Playwright playwright;
 	Browser browser;
 	BrowserContext context;
 	protected Page page;
-	public String email= ReusableDetails.reusableEmail();
+	public String email = ReusableDetails.reusableEmail();
 	Faker faker = new Faker();
 
 	@BeforeTest
 	public void setup() {
 		playwright = Playwright.create();
 		browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(false));
-		
+
 		context = browser.newContext(); // Create new context before each test
 		page = context.newPage();
-		page.navigate("https://uat.startupindia.gov.in/bhaskar");
+		page.navigate("https://www.startupindia.gov.in/bhaskar");
 		page.locator("//button[@class='styles_registerBtn__SNvQW']//img").click();
-		
+
 		page.locator("//input[@id='firstName']").fill(faker.name().firstName());
 		page.locator("//input[@id='lastName']").fill(faker.name().lastName());
 		page.locator("//select[@id='nationality']").selectOption("Indian");
-	//	String email= ReusableDetails.reusableEmail();
-		System.out.println("Registreed Email id - "+ email);
+		//	String email= ReusableDetails.reusableEmail();
+		System.out.println("Registreed Email id - " + email);
 		page.locator("//input[@id='emailId']").fill(email);
 		page.locator("//input[@id='mobileNumber']").fill(ReusableDetails.reusableMobile());
 		page.locator("//input[@id='password']").fill("Test@123");
@@ -144,6 +147,32 @@ public class IN_StartupFounder  {
 		ProfileCompletedTAG.waitFor();
 		System.out.println(ProfileCompletedTAG.isVisible() + " User Redirected to profile");
 	}
+
+	@Test(priority = 4)
+	public void BHASKAR_IN_StartupFounder_Search_Syncing() {
+		page.locator("//button[normalize-space()='Skip to your Dashboard']").click();
+		System.out.println("Clicked on Skip to your Dashboard on success popup");
+
+		Locator bHASKARidLocator = page.locator("//div[@class='pfofile_startupFounder__yK3Xm']/h4");
+		bHASKARidLocator.waitFor();
+
+		String UsersBHASKARID = bHASKARidLocator.textContent();
+		System.out.println("Generated BHASKAR ID: " + UsersBHASKARID);
+
+		Locator ProfileCompletedTAG = page.locator("//h3[normalize-space()='Profile Completed']");
+		ProfileCompletedTAG.waitFor();
+		System.out.println(ProfileCompletedTAG.isVisible() + " User Redirected to profile");
+
+
+		page.locator("//a[normalize-space()='Network']").click();
+
+		page.locator("//div[@class='search_companyinnerLogo__5sbfE']").nth(1).click();
+
+		page.url().contains(UsersBHASKARID);
+
+		assertTrue(page.url().contains(UsersBHASKARID));
 //================================================================================================================
+
+	}
 
 }
