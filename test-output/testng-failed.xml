@@ -3,13 +3,15 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="BHASKAR_login.IN_edit_StartupFounder">
+      <class name="PlaywrightTest.ORG_Startup">
         <methods>
-          <include name="StartupFounder_EditProfessioanlHeadline"/>
           <include name="createContext"/>
+          <include name="setup"/>
+          <include name="teardown"/>
+          <include name="BHASKAR_ORG_Startup_Complete_your_profile"/>
           <include name="closeContext"/>
         </methods>
-      </class> <!-- BHASKAR_login.IN_edit_StartupFounder -->
+      </class> <!-- PlaywrightTest.ORG_Startup -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

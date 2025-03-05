@@ -7,6 +7,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import com.github.javafaker.Faker;
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.BrowserType;
@@ -22,6 +23,7 @@ public class IN_Mentor {
 	BrowserContext context;
 	Page page;
 	String email = ReusableDetails.reusableEmail();
+	Faker faker = new Faker();
 
 	@BeforeTest
 	public void setup() {
@@ -30,10 +32,12 @@ public class IN_Mentor {
 
 		context = browser.newContext(); // Create new context before each test
 		page = context.newPage();
+		faker = new Faker();
 		page.navigate("https://uat.startupindia.gov.in/bhaskar/");
 		page.locator("//button[@class='styles_registerBtn__SNvQW']//img").click();
-		page.locator("//input[@id='firstName']").fill("Somesh");
-		page.locator("//input[@id='lastName']").fill("Landge");
+		
+		page.locator("//input[@id='firstName']").fill(faker.name().firstName());
+		page.locator("//input[@id='lastName']").fill(faker.name().lastName());
 		page.locator("//select[@id='nationality']").selectOption("Indian");
 		// String email= ReusableDetails.reusableEmail();
 		System.out.println("Registreed Email id - " + email);
