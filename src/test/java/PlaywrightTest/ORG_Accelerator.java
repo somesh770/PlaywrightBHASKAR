@@ -1,5 +1,7 @@
 package PlaywrightTest;
 
+import Utility_Pack.testdata;
+import com.github.javafaker.Faker;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -23,6 +25,7 @@ public class ORG_Accelerator {
 	Browser browser;
 	BrowserContext context;
 	Page page;
+	Faker faker = new Faker();
 
 	@BeforeTest
 	public void setup() {
@@ -30,10 +33,10 @@ public class ORG_Accelerator {
 		browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(false));
 		context = browser.newContext(); // Create new context before each test
 		page = context.newPage();
-		page.navigate("https://uat.startupindia.gov.in/bhaskar/");
+		page.navigate(testdata.getProperty("baseurl"));
 		page.locator("//button[@class='styles_registerBtn__SNvQW']//img").click();
-		page.locator("//input[@id='firstName']").fill("Somesh");
-		page.locator("//input[@id='lastName']").fill("Landge");
+		page.locator("//input[@id='firstName']").fill(faker.name().firstName());
+		page.locator("//input[@id='lastName']").fill(faker.name().lastName());
 		page.locator("//select[@id='nationality']").selectOption("Indian");
 		String email = ReusableDetails.reusableEmail();
 		System.out.println("Registered emailID - " + email);
@@ -62,7 +65,7 @@ public class ORG_Accelerator {
 		System.out.println("Entered PAN number" + PAN);
 		Locator entityLocator = page.getByPlaceholder("Enter Name of Entity");
 		entityLocator.click();
-		entityLocator.fill("QA Entity name");
+		entityLocator.fill("En"+faker.name().fullName());
 		System.out.println("Entered Entity name");
 		Locator coutryDropLocator = page.getByPlaceholder("Select Country");
 		coutryDropLocator.click();

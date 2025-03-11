@@ -31,7 +31,7 @@ public class IN_TradBizOwner {
 
 		context = browser.newContext(); // Create new context before each test
 		page = context.newPage();
-		page.navigate("https://uat.startupindia.gov.in/bhaskar/");
+
 		page.locator("//button[@class='styles_registerBtn__SNvQW']//img").click();
 		
 		page.locator("//input[@id='firstName']").fill(faker.name().firstName());

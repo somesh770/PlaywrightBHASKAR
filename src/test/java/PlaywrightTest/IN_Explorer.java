@@ -1,5 +1,6 @@
 package PlaywrightTest;
 
+import Utility_Pack.testdata;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -32,7 +33,7 @@ public class IN_Explorer {
 
 		context = browser.newContext(); // Create new context before each test
 		page = context.newPage();
-		page.navigate("https://uat.startupindia.gov.in/bhaskar/");
+		page.navigate(testdata.getProperty("baseurl"));
 		page.locator("//button[@class='styles_registerBtn__SNvQW']//img").click();
 		
 		page.locator("//input[@id='firstName']").fill(faker.name().firstName());
@@ -57,8 +58,6 @@ public class IN_Explorer {
 
 		page.locator("//h3[normalize-space()='Individual']").click();
 		page.locator("(//div[@class='styles_boxCard__jXGqM'])[6]").click();
-		page.locator("//input[@name='firstName']").fill("Somesh");
-		page.locator("//input[@name='lastName']").fill("Landge");
 		Locator DOB = page.locator("//input[@placeholder='Select year of birth']");
 		DOB.click();
 		page.locator("//div[@class='react-datepicker__year-text react-datepicker__year-2006']").click();
