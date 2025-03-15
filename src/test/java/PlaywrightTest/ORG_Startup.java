@@ -1,6 +1,7 @@
 package PlaywrightTest;
 
 import Utility_Pack.testdata;
+import com.microsoft.playwright.options.AriaRole;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -65,7 +66,7 @@ public class ORG_Startup {
 		System.out.println("Entered PAN number" + PAN);
 		Locator entityLocator = page.getByPlaceholder("Enter Name of Entity");
 		entityLocator.click();
-		entityLocator.fill("En"+faker.name().fullName());
+		entityLocator.type("En"+faker.name().fullName());
 		System.out.println("Entered Entity name");
 		Locator coutryDropLocator = page.getByPlaceholder("Select Country");
 		coutryDropLocator.click();
@@ -128,7 +129,9 @@ public class ORG_Startup {
 
 		Locator bHASKARidLocator = page.locator("//div[@class='pfofile_startupFounder__yK3Xm']/h4");
 		bHASKARidLocator.waitFor();
-		System.out.println("Generated BHASKAR ID: " + bHASKARidLocator.textContent());
+		String BHASKARID = bHASKARidLocator.textContent();
+		System.out.println("Generated BHASKAR ID: " + BHASKARID);
+
 
 		Locator ProfileCompletedTAG = page.locator("//h3[normalize-space()='Profile Completed']");
 		ProfileCompletedTAG.waitFor();
@@ -149,7 +152,8 @@ public class ORG_Startup {
 		System.out.println("Clicked on Skip to Dashboard");
 
 		Locator bHASKARidLocator = page.locator("//div[@class='pfofile_startupFounder__yK3Xm']/h4");
-		System.out.println("Generated BHASKAR ID: " + bHASKARidLocator.textContent());
+		String BHASKARID = bHASKARidLocator.textContent();
+		System.out.println("Generated BHASKAR ID: " + BHASKARID);
 
 		Locator ProfileCompletedTAG = page.locator("//h3[normalize-space()='Profile Completed']");
 		ProfileCompletedTAG.waitFor();
@@ -171,7 +175,8 @@ public class ORG_Startup {
 		System.out.println("Double-clicked on Publish Your Profile");
 
 		Locator bHASKARidLocator = page.locator("//div[@class='pfofile_startupFounder__yK3Xm']/h4");
-		System.out.println("Generated BHASKAR ID: " + bHASKARidLocator.textContent());
+		String BHASKARID = bHASKARidLocator.textContent().replace(" " , "");
+		System.out.println("Generated BHASKAR ID: " + BHASKARID);
 
 		Locator ProfileCompletedTAG = page.locator("//h3[normalize-space()='Profile Completed']");
 		ProfileCompletedTAG.waitFor();
@@ -180,5 +185,38 @@ public class ORG_Startup {
 		Locator userRoleLocator = page.locator("//div[@class='pfofile_startupFounder__yK3Xm']/h6");
 		String userRoleONprofileString = userRoleLocator.textContent();
 		Assert.assertEquals(userRoleONprofileString, "Startup");
+
+	}
+
+	@Test(priority = 4)
+	public  void Verify_Profile_Syncing_Into_searchPage()
+	{
+		page.locator("//button[normalize-space()='Complete your profile']").click();
+		System.out.println("Clicked on Complete your profile");
+
+		page.waitForSelector("//button[normalize-space()='Publish your Profile']");
+		Locator submitCTALocator = page.locator("//button[normalize-space()='Publish your Profile']");
+		submitCTALocator.dblclick();
+		System.out.println("Double-clicked on Publish Your Profile");
+
+		Locator bHASKARidLocator = page.locator("//div[@class='pfofile_startupFounder__yK3Xm']/h4");
+		String BHASKARID = bHASKARidLocator.textContent().replace(" " , "");
+		System.out.println("Generated BHASKAR ID: " + BHASKARID);
+
+		Locator ProfileCompletedTAG = page.locator("//h3[normalize-space()='Profile Completed']");
+		ProfileCompletedTAG.waitFor();
+		System.out.println(ProfileCompletedTAG.isVisible() + " User Redirected to profile");
+
+		Locator userRoleLocator = page.locator("//div[@class='pfofile_startupFounder__yK3Xm']/h6");
+		String userRoleONprofileString = userRoleLocator.textContent();
+		Assert.assertEquals(userRoleONprofileString, "Startup");
+
+		page.getByRole(AriaRole.NAVIGATION).getByRole(AriaRole.LINK, new Locator.GetByRoleOptions().setName("Network")).click();
+		Page page1 = page.waitForPopup(() -> {
+			page.locator("//div[@class='search_companyinnerLogo__5sbfE']").nth(0).click();
+			//	page.getByRole(AriaRole.IMG, new Page.GetByRoleOptions().setName("Magaret Reinger")).click();
+		});
+
+		Assert.assertTrue(page1.url().contains(BHASKARID));
 	}
 }

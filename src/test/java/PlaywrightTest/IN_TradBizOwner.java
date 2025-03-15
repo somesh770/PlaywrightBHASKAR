@@ -1,5 +1,6 @@
 package PlaywrightTest;
 
+import Utility_Pack.testdata;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -31,7 +32,7 @@ public class IN_TradBizOwner {
 
 		context = browser.newContext(); // Create new context before each test
 		page = context.newPage();
-
+		page.navigate(testdata.getProperty("baseurl"));
 		page.locator("//button[@class='styles_registerBtn__SNvQW']//img").click();
 		
 		page.locator("//input[@id='firstName']").fill(faker.name().firstName());
